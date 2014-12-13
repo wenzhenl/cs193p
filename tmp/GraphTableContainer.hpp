@@ -28,14 +28,18 @@
 #include <queue>
 #include <tr1/unordered_map>
 #include <tr1/unordered_set>
+#include <limits>
 
-using std::string;
-using std::vector;
-using std::priority_queue;
-using std::tr1::unordered_map;
-using std::tr1::unordered_set;
+struct Result {
+  Result(const std::string &i, const double v) : id(i), val(v) {}
+  Result() : val(std::numeric_limits<double>::max()) {}
+  bool operator<(const Result &other) const {return val < other.val;}
+  std::string id;
+  double val;
+};
 
-struct Result;
+std::ostream &
+operator<<(std::ostream &os, const Result &r);
 
 class FeatureVector;
 class LSHAngleHashFunction;
@@ -44,26 +48,26 @@ class RegularNearestNeighborGraph;
 
 class GraphTableContainer {
 public:
-  GraphTableContainer(const unordered_map<string, FeatureVector> &fvs, 
-                      const unordered_map<string, LSHAngleHashFunction> &hfs,
-                      const unordered_map<string, LSHAngleHashTable> &hts,
+  GraphTableContainer(const std::tr1::unordered_map<std::string, FeatureVector> &fvs, 
+                      const std::tr1::unordered_map<std::string, LSHAngleHashFunction> &hfs,
+                      const std::tr1::unordered_map<std::string, LSHAngleHashTable> &hts,
                       const RegularNearestNeighborGraph &nng) :
     fvs(fvs), hfs(hfs), hts(hts), nng(nng) {}
 
   void collect_candidates_from_hts(const FeatureVector &query, 
-                                   unordered_set<string> &candidates) const;
+                                   std::tr1::unordered_set<std::string> &candidates) const;
   void collect_candidates_from_hts_and_nng(const FeatureVector &query,
-                                   unordered_set<string> &candidates) const;
+                                   std::tr1::unordered_set<std::string> &candidates) const;
 
   void find_nearest_neighbors(const FeatureVector &query, 
                               const size_t n_neighbors,
                               const double max_proximity_radius,
-                              vector<Result> &results) const;
+                              std::vector<Result> &results) const;
 
 private:
-  const unordered_map<string, FeatureVector> &fvs;
-  const unordered_map<string, LSHAngleHashFunction> &hfs;
-  const unordered_map<string, LSHAngleHashTable> &hts;
+  const std::tr1::unordered_map<std::string, FeatureVector> &fvs;
+  const std::tr1::unordered_map<std::string, LSHAngleHashFunction> &hfs;
+  const std::tr1::unordered_map<std::string, LSHAngleHashTable> &hts;
   const RegularNearestNeighborGraph &nng;
 };
 

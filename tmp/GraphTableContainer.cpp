@@ -38,20 +38,11 @@ using std::tr1::unordered_set;
 typedef LSHAngleHashTable LSHTab;
 typedef LSHAngleHashFunction LSHFun;
 
-struct Result {
-  Result(const string &i, const double v) : id(i), val(v) {}
-  Result() : val(std::numeric_limits<double>::max()) {}
-  bool operator<(const Result &other) const {return val < other.val;}
-  string id;
-  double val;
-};
-
 
 std::ostream &
 operator<<(std::ostream &os, const Result &r) {
   return os << r.id << '\t' << r.val;
 }
-
 
 void
 GraphTableContainer::collect_candidates_from_hts(const FeatureVector &query,
