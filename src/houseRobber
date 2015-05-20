@@ -1,0 +1,21 @@
+class Solution {
+public:
+    int rob(vector<int>& nums) {
+    
+        if(nums.size() == 0)
+            return 0;
+        if(nums.size() == 1)
+            return nums[0];
+        
+        int last_case = nums[0];
+        int last_last_case = 0;
+        
+        int result = 0;
+        for(int i=2; i<= nums.size(); ++i) {
+            result = max(last_last_case + nums[i-1], last_case);
+            last_last_case = last_case;
+            last_case = result;
+        }
+        return result;
+    }
+};
